@@ -23,12 +23,14 @@ public class NumberBaseballGame extends Game {
         play();
     }
 
-    private void play() {
+    @Override
+    protected void play() {
         while (true) {
             printInputText();
-            userPlayer = new UserPlayer(getNumbersFromInput());
+            userPlayer.changeNumbers(getNumbersFromInput());
 
-            if (win()) {
+            gameResult.printResult();
+            if (gameResult.userPlayerWin()) {
                 printMenu();
                 int menu = getMenuFromInput();
 
@@ -43,8 +45,11 @@ public class NumberBaseballGame extends Game {
         }
     }
 
-    private void restart() {
+    @Override
+    protected void restart() {
+        userPlayer = new UserPlayer();
         computer = new Computer(new NextstepRandomNumber().getThreeNumbers());
+        gameResult = new NumberBaseballGameResult(userPlayer, computer);
     }
 
     private int getMenuFromInput() {
