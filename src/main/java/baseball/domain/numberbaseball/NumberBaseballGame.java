@@ -1,6 +1,7 @@
 package baseball.domain.numberbaseball;
 
 import baseball.domain.Game;
+import baseball.domain.GameResult;
 import baseball.domain.numberbaseball.util.NextstepRandomNumber;
 import baseball.domain.numberbaseball.util.NumberValidator;
 
@@ -14,12 +15,17 @@ public class NumberBaseballGame extends Game {
 
     private Player computer;
 
+    private GameResult gameResult;
+
     private Scanner sc;
 
     @Override
     public void start() {
+        userPlayer = new UserPlayer();
         computer = new Computer(new NextstepRandomNumber().getThreeNumbers());
+        gameResult = new NumberBaseballGameResult(userPlayer, computer);
         sc = new Scanner(System.in);
+
         play();
     }
 
@@ -66,18 +72,21 @@ public class NumberBaseballGame extends Game {
         List<Integer> numbers = new ArrayList<>();
 
         char[] input = sc.next().toCharArray();
-        for (char number : input) {
-            if (!('1' <= number && number <= '9')) {
-                throw new IllegalArgumentException();
-            }
+        final int SIZE = input.length;
+        if (!(0 < SIZE && SIZE < 4)) {
+            throw new IllegalArgumentException("3자리 숫자를 입력해주세요.");
         }
 
         for (char number : input) {
+            if (!('1' <= number && number <= '9')) {
+                throw new IllegalArgumentException("1 ~ 9 사이의 숫자를 입력해주세요.");
+            }
+
             numbers.add(number - '0');
         }
 
         if (NumberValidator.existsDuplicateNumber(numbers)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("서로 다른 숫자를 입력해주세요.");
         }
 
         return numbers;
