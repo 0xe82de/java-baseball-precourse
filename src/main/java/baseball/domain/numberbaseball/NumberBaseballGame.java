@@ -88,48 +88,4 @@ public class NumberBaseballGame extends Game {
         System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
     }
-
-    @Override
-    public boolean win() {
-        List<Integer> userNumbers = userPlayer.getNumbers();
-        List<Integer> computerNumbers = computer.getNumbers();
-
-        int ball = 0;
-        int strike = 0;
-        final int SIZE = userNumbers.size();
-        for (int i = 0; i < SIZE; i++) {
-            int userNumber = userNumbers.get(i);
-            for (int j = 0; j < SIZE; j++) {
-                int computerNumber = computerNumbers.get(j);
-
-                if (userNumber == computerNumber) {
-                    if (i == j) {
-                        ++strike;
-                    } else {
-                        ++ball;
-                    }
-                }
-            }
-        }
-
-
-        if (ball == 0 && strike == 0) {
-            System.out.print("낫싱");
-        } else {
-            if (ball > 0) {
-                System.out.print(ball + "볼");
-            }
-
-            if (strike > 0) {
-                if (ball > 0) {
-                    System.out.print(" ");
-                }
-
-                System.out.print(strike + "스트라이크");
-            }
-        }
-        System.out.println();
-
-        return strike == SIZE;
-    }
 }
