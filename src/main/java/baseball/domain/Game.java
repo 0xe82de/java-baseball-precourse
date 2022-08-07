@@ -4,11 +4,15 @@ public abstract class Game {
 
     public abstract void start();
 
-    protected abstract void play();
+    protected abstract void init();
 
-    protected abstract void restart();
+    public abstract boolean over();
+
+    protected abstract void play();
 
     protected abstract void printInputText();
 
     public abstract void printMenu();
+
+    public abstract void enterMenu();
 }

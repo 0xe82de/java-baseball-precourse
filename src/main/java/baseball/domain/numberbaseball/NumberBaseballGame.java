@@ -17,55 +17,35 @@ public class NumberBaseballGame extends Game {
 
     private GameResult gameResult;
 
-    private Scanner sc;
+    private boolean gameOver;
+
+    private final Scanner sc;
+
+    public NumberBaseballGame(Scanner sc) {
+        this.sc = sc;
+    }
 
     @Override
-    public void start() {
+    protected void init() {
         userPlayer = new UserPlayer();
         computer = new Computer(new NextstepRandomNumber().getThreeNumbers());
         gameResult = new NumberBaseballGameResult(userPlayer, computer);
-        sc = new Scanner(System.in);
+    }
 
+    @Override
+    public void start() {
+        init();
         play();
     }
 
     @Override
     protected void play() {
-        while (true) {
+        do {
             printInputText();
             userPlayer.changeNumbers(getNumbersFromInput());
 
             gameResult.printResult();
-            if (gameResult.userPlayerWin()) {
-                printMenu();
-                int menu = getMenuFromInput();
-
-                if (menu == 1) {
-                    // 새로 시작
-                    restart();
-                } else {
-                    // 종료
-                    break;
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void restart() {
-        userPlayer = new UserPlayer();
-        computer = new Computer(new NextstepRandomNumber().getThreeNumbers());
-        gameResult = new NumberBaseballGameResult(userPlayer, computer);
-    }
-
-    private int getMenuFromInput() {
-        int menu = sc.nextInt();
-
-        if (!(1 <= menu && menu <= 2)) {
-            throw new IllegalArgumentException();
-        }
-
-        return menu;
+        } while (!gameResult.userPlayerWin());
     }
 
     private List<Integer> getNumbersFromInput() {
@@ -101,5 +81,24 @@ public class NumberBaseballGame extends Game {
     public void printMenu() {
         System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+    }
+
+    @Override
+    public void enterMenu() {
+        int menu = sc.nextInt();
+
+        final int RESTART = 1;
+        final int QUIT = 2;
+
+        if (!(RESTART <= menu && menu <= QUIT)) {
+            throw new IllegalArgumentException();
+        }
+
+        gameOver = menu == QUIT;
+    }
+
+    @Override
+    public boolean over() {
+        return gameOver;
     }
 }
