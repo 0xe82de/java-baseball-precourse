@@ -2,9 +2,15 @@ package baseball.domain.numberbaseball.util;
 
 import java.util.List;
 
-public class NumberValidator {
+public class NumberVerifier {
 
-    public static boolean existsDuplicateNumber(List<Integer> numbers) {
+    public static void verify(List<Integer> numbers) {
+        if (existsDuplicateNumber(numbers)) {
+            throw new IllegalArgumentException("서로 다른 숫자를 입력해주세요.");
+        }
+    }
+
+    private static boolean existsDuplicateNumber(List<Integer> numbers) {
         final int SIZE = numbers.size();
 
         for (int i = 0; i < SIZE; i++) {

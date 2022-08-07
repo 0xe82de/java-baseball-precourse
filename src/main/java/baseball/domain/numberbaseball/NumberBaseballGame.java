@@ -1,9 +1,7 @@
 package baseball.domain.numberbaseball;
 
 import baseball.domain.Game;
-import baseball.domain.GameResult;
-import baseball.domain.numberbaseball.util.NextstepRandomNumber;
-import baseball.domain.numberbaseball.util.NumberValidator;
+import baseball.domain.numberbaseball.util.NumberVerifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +13,6 @@ public class NumberBaseballGame extends Game {
 
     private Player computer;
 
-    private GameResult gameResult;
-
     private boolean gameOver;
 
     private final Scanner sc;
@@ -26,55 +22,28 @@ public class NumberBaseballGame extends Game {
     }
 
     @Override
-    protected void init() {
-        userPlayer = new UserPlayer();
-        computer = new Computer(new NextstepRandomNumber().getThreeNumbers());
-        gameResult = new NumberBaseballGameResult(userPlayer, computer);
-    }
-
-    @Override
     public void start() {
         init();
         play();
     }
 
     @Override
-    protected void play() {
-        do {
-            printInputText();
-            userPlayer.changeNumbers(getNumbersFromInput());
-
-            gameResult.printResult();
-        } while (!gameResult.userPlayerWin());
-    }
-
-    private List<Integer> getNumbersFromInput() {
-        List<Integer> numbers = new ArrayList<>();
-
-        char[] input = sc.next().toCharArray();
-        final int SIZE = input.length;
-        if (!(0 < SIZE && SIZE < 4)) {
-            throw new IllegalArgumentException("3자리 숫자를 입력해주세요.");
-        }
-
-        for (char number : input) {
-            if (!('1' <= number && number <= '9')) {
-                throw new IllegalArgumentException("1 ~ 9 사이의 숫자를 입력해주세요.");
-            }
-
-            numbers.add(number - '0');
-        }
-
-        if (NumberValidator.existsDuplicateNumber(numbers)) {
-            throw new IllegalArgumentException("서로 다른 숫자를 입력해주세요.");
-        }
-
-        return numbers;
+    protected void init() {
+        userPlayer = new UserPlayer();
+        computer = new Computer();
+        gameResult = new NumberBaseballGameResult(userPlayer, computer);
     }
 
     @Override
-    protected void printInputText() {
-        System.out.print("숫자를 입력해주세요 : ");
+    protected void play() {
+        List<Integer> numbers = null;
+        do {
+            printPlayDisplay();
+            numbers = enterNumbersFromUser();
+            NumberVerifier.verify(numbers);
+            userPlayer.changeNumbers(numbers);
+            gameResult.printResult();
+        } while (!gameResult.userPlayerWin());
     }
 
     @Override
@@ -100,5 +69,41 @@ public class NumberBaseballGame extends Game {
     @Override
     public boolean over() {
         return gameOver;
+    }
+
+    private List<Integer> enterNumbersFromUser() {
+        char[] values = sc.next().toCharArray();
+        if (incorrectValue(values) || incorrectSize(values)) {
+            throw new IllegalArgumentException("1 ~ 9 사이의 숫자를 3개 입력해주세요.");
+        }
+
+        return makeNumbers(values);
+    }
+
+    private boolean incorrectValue(char[] values) {
+        for (char number : values) {
+            if (!('1' <= number && number <= '9')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean incorrectSize(char[] values) {
+        return values.length != 3;
+    }
+
+    private List<Integer> makeNumbers(char[] values) {
+        List<Integer> numbers = new ArrayList<>(values.length);
+        for (char value : values) {
+            numbers.add(value - '0');
+        }
+
+        return numbers;
+    }
+
+    private void printPlayDisplay() {
+        System.out.print("숫자를 입력해주세요 : ");
     }
 }

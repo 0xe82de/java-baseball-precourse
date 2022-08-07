@@ -1,10 +1,10 @@
 package baseball.domain.numberbaseball;
 
-import java.util.List;
+import baseball.domain.numberbaseball.util.NextstepRandomNumber;
 
 public class Computer extends Player {
 
-    public Computer(List<Integer> numbers) {
-        super(numbers);
+    public Computer() {
+        this.numbers = new NextstepRandomNumber().getThreeNumbers();
     }
 }
