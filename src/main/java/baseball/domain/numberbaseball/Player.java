@@ -4,16 +4,9 @@ import java.util.List;
 
 public abstract class Player {
 
-    private List<Integer> numbers;
+    protected List<Integer> numbers;
 
-    public Player() {}
-
-    public Player(List<Integer> numbers) {
-        if (numbers == null || numbers.isEmpty() || numbers.size() > 3) {
-            throw new IllegalArgumentException();
-        }
-
-        this.numbers = numbers;
+    public Player() {
     }
 
     public List<Integer> getNumbers() {
