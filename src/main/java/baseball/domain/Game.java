@@ -2,15 +2,15 @@ package baseball.domain;
 
 public abstract class Game {
 
+    protected GameResult gameResult;
+
     public abstract void start();
 
     protected abstract void init();
 
-    public abstract boolean over();
-
     protected abstract void play();
 
-    protected abstract void printInputText();
+    public abstract boolean over();
 
     public abstract void printMenu();
 
