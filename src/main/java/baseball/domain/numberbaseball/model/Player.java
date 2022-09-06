@@ -1,4 +1,4 @@
-package baseball.domain.numberbaseball;
+package baseball.domain.numberbaseball.model;
 
 import java.util.List;
 
