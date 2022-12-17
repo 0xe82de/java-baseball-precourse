@@ -1,5 +1,8 @@
 package baseball.domain.numberbaseball.util;
 
+import baseball.numberbaseball.util.NumberVerifier;
+import baseball.numberbaseball.view.RequestType;
+import baseball.numberbaseball.view.UserData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +39,7 @@ class NumberVerifierTest {
     @DisplayName("중복되는 숫자가 있으면 예외가 발생한다.")
     @Test
     void occurExceptionWhenNumbersNotOverlap() {
-        assertThatThrownBy(() -> NumberVerifier.verify(Arrays.asList(1, 2, 2)))
+        assertThatThrownBy(() -> NumberVerifier.verify(new UserData(RequestType.PLAY, Arrays.asList(1, 2, 2))))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("서로 다른 숫자를 입력해주세요.");
     }
@@ -44,6 +47,6 @@ class NumberVerifierTest {
     @DisplayName("중복되는 숫자가 없으면 예외가 발생하지 않는다.")
     @Test
     void notOccurExceptionWhenNumbersNotOverlap() {
-        NumberVerifier.verify(Arrays.asList(1, 2, 3));
+        NumberVerifier.verify(new UserData(RequestType.PLAY, Arrays.asList(1, 2, 3)));
     }
 }
